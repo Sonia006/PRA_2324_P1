@@ -8,10 +8,11 @@ class ListArray : public List<T> {
         T* arr;
         int max;
         int n;
-        static const int MINSIZE;
+        static const int MINSIZE = 2;
         void resize(int new_size);
 
     public:
+        //Metodos de clase List.h
         void insert(int pos, T e) override;
         void append(T e) override;
         void prepend(T e) override;
@@ -21,6 +22,7 @@ class ListArray : public List<T> {
         bool empty() override;
         int size() override;
 
+        //Metodos propios
         ListArray();
         ~ListArray();
         T operator[](int pos);
@@ -28,6 +30,7 @@ class ListArray : public List<T> {
         friend std::ostream& operator<<(std::ostream &out, const ListArray<U> &list);
 };
 
+//Metodos propios
 template <typename T> 
 ListArray<T>::ListArray(){
     arr = new T[MINSIZE]; 
@@ -59,11 +62,26 @@ std::ostream& operator<<(std::ostream &out, const ListArray<T> &list){
     return out;
 }
 
+template <typename T> 
+void ListArray<T>::resize(int new_size){
+    T* nuevo = new T[new_size];
+    for(int i = 0; i < n; i++){
+        nuevo[i] = arr[i];
+    }
+    delete[] arr;
+    arr = nuevo;
+    max = new_size;
+}
+
+//Metodos de clase List.h
 template <typename T>
 void ListArray<T>::insert(int pos, T e) {
-    if (pos < 0 || pos > n) throw std::out_of_range("posición inválida");
-    if (n == max) resize(max * 2);
-    for (int i = n; i > pos; i--) arr[i] = arr[i - 1];
+    if (pos < 0 || pos > n) 
+        throw std::out_of_range("posición inválida");
+    if (n == max) 
+        resize(max * 2);
+    for (int i = n; i > pos; i--) 
+        arr[i] = arr[i - 1];
     arr[pos] = e;
     n++;
 }
@@ -80,24 +98,29 @@ void ListArray<T>::prepend(T e) {
 
 template <typename T>
 T ListArray<T>::remove(int pos) {
-    if (pos < 0 || pos >= n) throw std::out_of_range("posición inválida");
+    if (pos < 0 || pos >= n) 
+        throw std::out_of_range("posición inválida");
     T valor = arr[pos];
-    for (int i = pos; i < n - 1; i++) arr[i] = arr[i + 1];
+    for (int i = pos; i < n - 1; i++) 
+        arr[i] = arr[i + 1];
     n--;
-    if (n < max / 4 && max > MINSIZE) resize(max / 2);
+    if (n < max / 4 && max > MINSIZE) 
+        resize(max / 2);
     return valor;
 }
 
 template <typename T>
 T ListArray<T>::get(int pos) {
-    if (pos < 0 || pos >= n) throw std::out_of_range("posición inválida");
+    if (pos < 0 || pos >= n) 
+        throw std::out_of_range("posición inválida");
     return arr[pos];
 }
 
 template <typename T>
 int ListArray<T>::search(T e) {
     for (int i = 0; i < n; i++) {
-        if (arr[i] == e) return i;
+        if (arr[i] == e) 
+            return i;
     }
     return -1;
 }
@@ -111,17 +134,3 @@ template <typename T>
 int ListArray<T>::size() {
     return n;
 }
-
-template <typename T> 
-void ListArray<T>::resize(int new_size){
-    T* nuevo = new T[new_size];
-    for(int i = 0; i < n; i++){
-        nuevo[i] = arr[i];
-    }
-    delete[] arr;
-    arr = nuevo;
-    max = new_size;
-}
-
-template <typename T>
-const int ListArray<T>::MINSIZE = 2;
