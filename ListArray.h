@@ -46,7 +46,7 @@ ListArray<T>::~ListArray(){
 template <typename T> 
 T ListArray<T>::operator[](int pos){
     if(pos > (n - 1) || pos < 0){
-        throw std::out_of_range("mensaje descriptivo");
+        throw std::out_of_range("posición inválida");
     }else{
         return arr[pos];
     }
